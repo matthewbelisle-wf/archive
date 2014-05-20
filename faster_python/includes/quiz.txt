@@ -1,0 +1,13 @@
+$ ipython
+In [1]: def intersect(list1, list2):
+   ...:     return [i for i in list1 if i in list2]
+   ...: 
+
+In [2]: import random
+
+In [3]: list1 = random.sample(xrange(10000), 1000)
+
+In [4]: list2 = random.sample(xrange(10000), 1000)
+
+In [5]: len(intersect(list1, list2))
+Out[5]: 109

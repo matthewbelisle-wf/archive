@@ -1,0 +1,10 @@
+$ ipython 
+In [1]: import math
+
+In [2]: timeit math.sqrt(100)
+10000000 loops, best of 3: 147 ns per loop
+
+In [3]: sqrt = math.sqrt
+
+In [4]: timeit sqrt(100)
+10000000 loops, best of 3: 111 ns per loop

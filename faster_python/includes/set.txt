@@ -1,0 +1,10 @@
+$ ipython
+In [1]: items = list(xrange(10 ** 8))
+
+In [2]: timeit None in items
+1 loops, best of 3: 3.04 s per loop
+
+In [3]: items = set(xrange(10 ** 8))
+
+In [4]: timeit None in items
+10000000 loops, best of 3: 63.2 ns per loop

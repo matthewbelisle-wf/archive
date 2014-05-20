@@ -1,0 +1,8 @@
+$ ipython
+In [1]: import sys
+
+In [2]: sys.getsizeof([100, 200])
+Out[2]: 88
+
+In [3]: sys.getsizeof((100, 200))
+Out[3]: 72

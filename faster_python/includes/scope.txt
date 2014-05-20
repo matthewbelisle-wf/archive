@@ -1,0 +1,19 @@
+$ ipython 
+In [1]: GLOBAL_VAR = 10
+
+In [2]: def test_global():
+   ...:     for i in xrange(10 ** 7):
+   ...:         GLOBAL_VAR
+   ...:         
+
+In [3]: def test_local():
+   ...:     local_var = 10
+   ...:     for i in xrange(10 ** 7):
+   ...:         local_var
+   ...:         
+
+In [4]: timeit test_global()
+1 loops, best of 3: 358 ms per loop
+
+In [5]: timeit test_local()
+1 loops, best of 3: 298 ms per loop

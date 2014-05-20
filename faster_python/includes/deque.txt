@@ -1,0 +1,12 @@
+$ ipython 
+In [1]: items = list(xrange(10 ** 7))
+
+In [2]: timeit items.insert(0, None)
+100 loops, best of 3: 8.04 ms per loop
+
+In [3]: from collections import deque
+
+In [4]: items = deque(xrange(10 ** 7))
+
+In [5]: timeit items.appendleft(None)
+10000000 loops, best of 3: 104 ns per loop

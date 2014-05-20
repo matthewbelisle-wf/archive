@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\definecolor{light-gray}{gray}{0.95}
+\lstset{
+  basicstyle=\ttfamily,
+  backgroundcolor=\color{light-gray}}
+\begin{document}
+\title{How to Write Faster Python}
+\author{Matt Belisle}
+\maketitle
+\tableofcontents
+\pagebreak
+\section{Introduction}
+This article is a summary of what Matt learned at PyCon 2013 about how
+to make Python programs faster.  A digital version of this article can
+be found here:
+
+\bigskip\noindent
+\url{https://github.com/matthewbelisle-wf/faster_python/blob/master/faster_python.pdf}
+\bigskip
+
+\noindent In order to get the most out of this article, open up an
+IPython prompt yourself and play around with the examples below.
+Sections \ref{sec:builtin_types} and \ref{sec:appropriate_types} can
+make a slow program orders of magnitude faster.  Sections
+\ref{sec:attr_lookups} and \ref{sec:scope} can make a slow
+program fractionally faster.
+\section{Use Built-in Types and Functions}\label{sec:builtin_types}
+This seems obvious but worth mentioning.  Built-in data structures
+like list, dict, complex, etc. have two advantages compared to
+whatever we write.
+\begin{enumerate}
+  \item They were written in C.
+  \item They were written by Guido.
+\end{enumerate}
+Before writing a class or a function make sure there isn't one already
+built into Python.  There are a lot of built in functions that most of
+us don't know about.
+\section{Use the Appropriate Data Type}\label{sec:appropriate_types}
+A common mistake for Python programmers is to use a list when we
+should be using a tuple, set, deque, or a generator instead.
+\begin{itemize}
+  \item List\\\url{http://docs.python.org/2/library/functions.html#list}
+  \item Tuple\\\url{http://docs.python.org/2/library/functions.html#tuple}
+  \item Set\\\url{http://docs.python.org/2/library/functions.html#set}
+  \item Deque\\\url{http://docs.python.org/2/library/collections.html#collections.deque}
+  \item Generator\\\url{http://docs.python.org/2/reference/simple_stmts.html#yield}
+\end{itemize}
+\subsection{Set vs List}
+For inclusion testing, use a set which is $O(1)$ time complexity
+instead of a list which is $O(n)$.
+
+\bigskip
+\lstinputlisting{includes/set.txt}
+\bigskip
+\subsection{Deque vs List}
+For prepending/appending, use a deque which is $O(1)$ time complexity
+instead of a list which is $O(n)$.
+
+\bigskip
+\lstinputlisting{includes/deque.txt}
+\bigskip
+\subsection{Tuple vs List}
+Use a tuple when it's ok for the object to be immutable since a tuple
+takes up less memory.
+
+\bigskip
+\lstinputlisting{includes/tuple.txt}
+\bigskip
+\subsection{Generator vs List}
+For iterables where you only need to loop through one variable at a
+time you should use a generator like xrange(), which is $O(1)$ space
+complexity instead of a list like range() which is $O(n)$ space
+complexity.
+
+\bigskip
+\lstinputlisting{includes/generator.txt}
+\bigskip
+\subsection{Quiz}
+Instead of a list, which data type would make this intersect call 200
+times faster?\footnote{Answer: A set.  Extra credit if you noticed
+  that using the built-in intersect() method would make it 800 times
+  faster.}
+
+\bigskip
+\lstinputlisting{includes/quiz.txt}
+\bigskip
+\section{Use Attribute Lookups Sparingly}\label{sec:attr_lookups}
+Accessing an attribute on an object performs a hash table lookup
+behind the scenes, so it is best to avoid using attributes inside a
+loop.
+
+\bigskip
+\lstinputlisting{includes/sqrt.txt}
+\bigskip
+\section{Use Local Scope when Possible}\label{sec:scope}
+When the python interpreter does a variable lookup, it searches the
+local scope first.  If it can't find it there, it searches the global
+scope, and if it can't find it there it searches the built-in scope
+before throwing a NameError.
+
+\bigskip\noindent
+\url{http://docs.python.org/2/tutorial/classes.html#python-scopes-and-namespaces}
+\bigskip
+
+\noindent This means that local variable lookups are a little faster
+than global variable lookups.
+
+\bigskip
+\lstinputlisting{includes/scope.txt}
+\bigskip
+\section{Test for Hotspots}
+There are several tools available for locating inefficient parts of a
+program.  Use whichever one you like best.
+\subsection{Time Complexity}
+\begin{itemize}
+  \item timeit - Times one line snippets
+    \\\url{http://docs.python.org/2/library/timeit.html}
+  \item cProfile - Collects stats about time spent in each function
+    \\\url{http://docs.python.org/2/library/profile.html#module-cProfile}
+  \item kernprof.py - Collects stats about time spent on each line
+    \\\url{https://pypi.python.org/pypi/line_profiler}
+\end{itemize}
+\subsection{Memory Complexity}
+\begin{itemize}
+  \item heapy - Takes memory measuremeants inside Python on any OS
+    \\\url{https://pypi.python.org/pypi/guppy/}
+  \item valgrind - Takes memory measurements for any program running on Unix
+    \\\url{http://valgrind.org/}
+\end{itemize}
+\end{document}

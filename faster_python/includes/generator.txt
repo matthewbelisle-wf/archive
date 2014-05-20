@@ -1,0 +1,14 @@
+$ ipython 
+In [1]: import sys
+
+In [2]: sum(range(1000))
+Out[2]: 499500
+
+In [3]: sys.getsizeof(range(1000))
+Out[3]: 8072
+
+In [4]: sum(xrange(1000))
+Out[4]: 499500
+
+In [5]: sys.getsizeof(xrange(1000))
+Out[5]: 40
